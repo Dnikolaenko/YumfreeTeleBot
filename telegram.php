@@ -4,7 +4,14 @@ class Telegram {
 	const API_URL = 'https://api.telegram.org/bot'. self::BOT_TOKEN .'/';
 	const CHAT_ID = '280628855';
 
-	public $text = 'Ещё один тест!';
+	public $text = "";
+
+	public function __construct(){
+		if(isset($_POST)){
+			$msg = $_POST['msg'];
+			$this->text = $msg;
+		}
+	}
 
 	public function send($text) {
 		$parametrs = [
@@ -15,11 +22,18 @@ class Telegram {
 		$url = ''. self::API_URL .'sendMessage?'. http_build_query($parametrs);
 
 		$grub = file_get_contents($url);
+		$link_address = '/';
 
-		return $grub;
+		if($grub){
+			echo "Сообщение отправлено!</br>";
+			echo '<a href="' . $link_address . '">Назад</a>';
+			return $grub;
+		} else {
+			echo "Не получилось отправить сообщение!";
+			return false;
+		}
 	}
 }
 
 $bot = new Telegram();
 $bot->send();
-?>
